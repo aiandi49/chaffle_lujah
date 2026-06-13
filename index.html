@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaffle-lujah | Waffles Worth Praising</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF1E2;
+    --paper:#FFFBF4;
+    --berry:#A9335A;
+    --berry-dark:#7E2543;
+    --terracotta:#E8804E;
+    --mustard:#F4B941;
+    --teal:#3D8C8C;
+    --green:#4F7350;
+    --ink:#3A2A20;
+    --halo:#F2A93B;
+    --shadow: 0 10px 30px rgba(122,60,40,0.15);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Nunito', sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    font-size:17px;
+    line-height:1.6;
+  }
+  h1,h2,h3,h4{
+    font-family:'Baloo 2', sans-serif;
+    margin:0;
+    line-height:1.1;
+  }
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+
+  .wrap{max-width:1140px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(251,241,226,0.9);
+    backdrop-filter: blur(6px);
+    border-bottom:3px dashed var(--terracotta);
+  }
+  .nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 24px;
+  }
+  .nav-logo{display:flex; align-items:center; gap:10px; font-family:'Baloo 2'; font-weight:800; font-size:1.3rem; color:var(--berry-dark); text-decoration:none;}
+  .nav-logo img{width:44px; height:44px; border-radius:50%; box-shadow: var(--shadow);}
+  .nav-links{display:flex; gap:22px; font-weight:700; font-size:0.95rem;}
+  .nav-links a{text-decoration:none; color:var(--ink); position:relative; padding:4px 0;}
+  .nav-links a:hover{color:var(--berry);}
+  .nav-cta{
+    background:var(--berry); color:#fff; padding:9px 18px; border-radius:999px;
+    font-weight:800; text-decoration:none; font-size:0.9rem; box-shadow: var(--shadow);
+    white-space:nowrap;
+  }
+  .nav-cta:hover{background:var(--berry-dark);}
+  @media (max-width:760px){
+    .nav-links{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:70px 0 110px;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse at 80% -10%, rgba(244,185,65,0.35), transparent 55%),
+      radial-gradient(ellipse at 10% 110%, rgba(61,140,140,0.18), transparent 50%),
+      var(--cream);
+  }
+  .hero .wrap{
+    display:grid; grid-template-columns: 1.1fr 1fr; gap:50px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Baloo 2'; font-weight:700; font-size:0.85rem;
+    letter-spacing:.08em; text-transform:uppercase;
+    color:var(--berry); background:#fff;
+    border:2px solid var(--berry); border-radius:999px;
+    padding:6px 16px; margin-bottom:18px;
+    box-shadow: var(--shadow);
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 6vw, 4.4rem);
+    color:var(--berry-dark);
+    letter-spacing:-0.01em;
+  }
+  .hero h1 span{color:var(--terracotta);}
+  .hero p.lead{
+    margin:22px 0 30px; font-size:1.15rem; max-width:480px; color:#5A4636;
+  }
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Baloo 2'; font-weight:700; font-size:1rem;
+    padding:14px 28px; border-radius:999px; text-decoration:none;
+    transition: transform .15s ease, box-shadow .15s ease;
+    border:3px solid transparent;
+  }
+  .btn:hover{transform: translateY(-3px);}
+  .btn-primary{background:var(--berry); color:#fff; box-shadow: var(--shadow);}
+  .btn-primary:hover{background:var(--berry-dark);}
+  .btn-outline{border-color:var(--berry-dark); color:var(--berry-dark);}
+  .btn-outline:hover{background:var(--berry-dark); color:#fff;}
+
+  /* polaroid clothesline */
+  .clothesline{
+    position:relative;
+    height:380px;
+  }
+  .line{
+    position:absolute; top:38px; left:-30px; right:-30px;
+    height:2px; background:repeating-linear-gradient(to right, #c8b6a0 0 8px, transparent 8px 16px);
+    z-index:1;
+  }
+  .polaroid{
+    position:absolute;
+    background:#fff; padding:10px 10px 28px; border-radius:4px;
+    box-shadow: 0 14px 28px rgba(80,40,20,0.18);
+    width:150px;
+    transform-origin: top center;
+  }
+  .polaroid img{border-radius:2px; aspect-ratio:1/1; object-fit:cover; width:100%;}
+  .polaroid .clip{
+    position:absolute; top:-14px; left:50%; transform:translateX(-50%) rotate(-4deg);
+    font-size:1.6rem; color:#9aa0a6;
+  }
+  .p1{ top:0; left:0; transform:rotate(-7deg); animation: sway1 6s ease-in-out infinite; }
+  .p2{ top:60px; left:130px; width:170px; transform:rotate(4deg); z-index:2; animation: sway2 7s ease-in-out infinite; }
+  .p3{ top:-10px; right:30px; transform:rotate(8deg); animation: sway1 6.5s ease-in-out infinite; }
+  .p4{ top:200px; left:30px; transform:rotate(-3deg); width:130px; animation: sway2 8s ease-in-out infinite; }
+  .p5{ top:190px; right:0; width:140px; transform:rotate(6deg); animation: sway1 5.5s ease-in-out infinite; }
+
+  @keyframes sway1{ 0%,100%{transform:rotate(-7deg);} 50%{transform:rotate(-3deg);} }
+  @keyframes sway2{ 0%,100%{transform:rotate(4deg);} 50%{transform:rotate(8deg);} }
+
+  @media (max-width:900px){
+    .hero .wrap{grid-template-columns:1fr; text-align:center;}
+    .hero p.lead{margin-inline:auto;}
+    .hero-ctas{justify-content:center;}
+    .clothesline{height:300px; margin-top:20px;}
+  }
+
+  /* ---------- SECTION GENERIC ---------- */
+  section{padding:90px 0;}
+  .section-head{
+    text-align:center; max-width:680px; margin:0 auto 56px;
+  }
+  .section-head .eyebrow{margin-bottom:14px;}
+  .section-head h2{
+    font-size:clamp(2rem, 4.5vw, 3rem); color:var(--berry-dark);
+  }
+  .section-head p{color:#5A4636; margin-top:14px; font-size:1.05rem;}
+
+  /* ---------- ORIGIN STORY ---------- */
+  .origin{background:var(--berry); color:var(--paper); position:relative; overflow:hidden;}
+  .origin::before{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+    pointer-events:none;
+  }
+  .origin .wrap{position:relative; display:grid; grid-template-columns: 1fr 1.3fr; gap:60px; align-items:center; min-width:0;}
+  .origin .wrap > *{min-width:0;}
+  .origin-card{
+    background:var(--berry-dark); border-radius:18px; padding:34px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    transform: rotate(-2deg);
+    border: 3px solid var(--mustard);
+  }
+  .origin-card h3{font-size:2.6rem; color:var(--mustard); margin-bottom:6px;}
+  @media (max-width:480px){
+    .origin-card h3{font-size:clamp(1.4rem, 11vw, 2.6rem);}
+  }
+  .origin-card .pron{
+    font-family:'Baloo 2'; font-weight:700; color:#fff; font-size:1.2rem;
+    background:rgba(244,185,65,0.18); border-radius:10px; padding:10px 16px; display:inline-block;
+    margin:14px 0; white-space:nowrap;
+  }
+  .origin-text h2{color:var(--mustard); margin-bottom:18px; font-size:clamp(1.8rem,4vw,2.6rem);}
+  .origin-text p{font-size:1.08rem; opacity:.95; margin:0 0 16px;}
+  .origin-text .tagline{
+    font-family:'Baloo 2'; font-weight:700; font-size:1.4rem; color:#fff;
+    border-left:5px solid var(--mustard); padding-left:18px; margin-top:24px;
+  }
+  @media (max-width:980px){
+    .origin .wrap{grid-template-columns:1fr;}
+    .origin-card{transform:none; max-width:420px; margin:0 auto;}
+  }
+
+  /* ---------- WHAT'S A CHAFFLE ---------- */
+  .chaffle101{
+    background: var(--paper);
+  }
+  .chaffle101 .wrap{
+    display:grid; grid-template-columns: 1fr 1fr; gap:60px; align-items:center;
+  }
+  .chaffle101 img{border-radius:20px; box-shadow:var(--shadow); transform:rotate(-1.5deg);}
+  .chaffle101 .copy h2{margin-bottom:18px;}
+  .chaffle101 .copy p{margin-bottom:16px; color:#5A4636;}
+  .badge-row{display:flex; gap:14px; margin-top:24px; flex-wrap:wrap;}
+  .badge{
+    font-family:'Baloo 2'; font-weight:700; font-size:0.9rem;
+    background:var(--cream); border:2px solid var(--green); color:var(--green);
+    border-radius:999px; padding:8px 18px;
+  }
+  @media (max-width:860px){
+    .chaffle101 .wrap{grid-template-columns:1fr;}
+    .chaffle101 img{order:-1; transform:none;}
+  }
+
+  /* ---------- MENU / DISHES ---------- */
+  .menu{background:var(--cream);}
+  .menu-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:32px;
+  }
+  .dish{
+    background:var(--paper); border-radius:18px; overflow:hidden;
+    box-shadow: var(--shadow);
+    display:flex; flex-direction:column;
+    transition: transform .2s ease;
+  }
+  .dish:hover{transform: translateY(-6px);}
+  .dish-img{aspect-ratio:1/1; overflow:hidden;}
+  .dish-img img{width:100%; height:100%; object-fit:cover;}
+  .dish-body{padding:22px;}
+  .dish-body h3{color:var(--berry-dark); font-size:1.4rem; margin-bottom:8px;}
+  .dish-body p{color:#5A4636; font-size:0.97rem; margin:0 0 12px;}
+  .dish-tags{display:flex; gap:8px; flex-wrap:wrap;}
+  .tag{
+    font-size:0.75rem; font-weight:700; font-family:'Baloo 2';
+    text-transform:uppercase; letter-spacing:.04em;
+    padding:4px 10px; border-radius:999px; color:#fff;
+  }
+  .tag.veg{background:var(--green);}
+  .tag.gf{background:var(--teal);}
+  .tag.soon{background:var(--terracotta);}
+
+  /* ---------- OWNERS ---------- */
+  .owners{background:var(--paper);}
+  .owners .wrap{
+    display:grid; grid-template-columns: 1fr 1.2fr; gap:60px; align-items:center;
+  }
+  .owners img{border-radius:24px; box-shadow:var(--shadow);}
+  .owners .copy h2{margin-bottom:18px;}
+  .owners .copy p{color:#5A4636; margin-bottom:14px;}
+  .owners blockquote{
+    font-family:'Baloo 2'; font-weight:600; font-size:1.15rem; color:var(--berry-dark);
+    border-left:5px solid var(--mustard); padding-left:18px; margin:22px 0 0; font-style:normal;
+  }
+  @media (max-width:860px){
+    .owners .wrap{grid-template-columns:1fr;}
+  }
+
+  /* ---------- REVIEWS ---------- */
+  .reviews{
+    background: var(--teal); color:#fff; position:relative; overflow:hidden;
+  }
+  .reviews::before{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+  }
+  .reviews .wrap{position:relative;}
+  .reviews .section-head h2{color:#fff;}
+  .reviews .section-head .eyebrow{background:#fff; color:var(--teal); border-color:#fff;}
+  .reviews .section-head p{color:rgba(255,255,255,0.85);}
+  .review-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:28px;
+  }
+  .review-card{
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.25);
+    border-radius:18px; padding:28px; backdrop-filter: blur(4px);
+  }
+  .review-card .stars{color:var(--mustard); font-size:1.1rem; margin-bottom:10px; letter-spacing:2px;}
+  .review-card p{font-size:0.98rem; line-height:1.65; margin-bottom:16px;}
+  .review-card .who{font-family:'Baloo 2'; font-weight:700;}
+  .review-reply{
+    margin-top:16px; padding-top:16px; border-top:1px dashed rgba(255,255,255,0.3);
+    font-size:0.9rem; opacity:.9;
+  }
+  .review-reply .who{color:var(--mustard);}
+
+  /* ---------- EVENTS / FIND US ---------- */
+  .events{background:var(--cream);}
+  .event-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:28px;
+  }
+  .event-card{
+    border-radius:18px; overflow:hidden; box-shadow:var(--shadow); background:var(--paper);
+    display:block; text-decoration:none; color:inherit;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .event-card:hover{transform: translateY(-6px); box-shadow:0 16px 36px rgba(122,60,40,0.22);}
+  .event-card img{width:100%; aspect-ratio:16/9; object-fit:cover;}
+  .event-body{padding:20px;}
+  .event-body .date{
+    font-family:'Baloo 2'; font-weight:700; color:var(--berry); font-size:0.95rem;
+    text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;
+  }
+  .event-body h3{font-size:1.25rem; color:var(--berry-dark);}
+  .event-body p{color:#5A4636; font-size:0.92rem; margin-top:6px;}
+
+  /* ---------- BOOK / CONTACT ---------- */
+  .booking{
+    background: linear-gradient(135deg, var(--terracotta), var(--berry));
+    color:#fff; text-align:center; position:relative; overflow:hidden;
+  }
+  .booking::before{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1.5px, transparent 1.5px);
+    background-size:26px 26px;
+  }
+  .booking .wrap{position:relative; max-width:760px;}
+  .booking h2{font-size:clamp(2rem,5vw,3rem); margin-bottom:18px;}
+  .booking p{font-size:1.1rem; opacity:.95; margin-bottom:34px;}
+  .booking .hero-ctas{justify-content:center;}
+  .booking .btn-primary{background:#fff; color:var(--berry-dark);}
+  .booking .btn-primary:hover{background:var(--cream);}
+  .booking .btn-outline{border-color:#fff; color:#fff;}
+  .booking .btn-outline:hover{background:#fff; color:var(--berry-dark);}
+
+  .contact-grid{
+    margin-top:46px; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+    gap:24px; text-align:left;
+  }
+  .contact-item{
+    background:rgba(255,255,255,0.14); border-radius:14px; padding:18px 20px;
+    border:1px solid rgba(255,255,255,0.3);
+  }
+  .contact-item .label{font-family:'Baloo 2'; font-weight:700; font-size:0.85rem; text-transform:uppercase; opacity:.8; letter-spacing:.06em;}
+  .contact-item a, .contact-item div.val{font-weight:700; font-size:1.05rem; margin-top:4px;}
+  .contact-item a{display:block;}
+  .contact-item a[href^="mailto"]{font-size:0.95rem; white-space:nowrap;}
+  @media (max-width:480px){
+    .contact-item a[href^="mailto"]{font-size:0.6rem;}
+  }
+
+  /* ---------- GIFT NOTE ---------- */
+  .gift-note{
+    background:var(--mustard);
+    color:var(--berry-dark);
+  }
+  .gift-note .wrap{
+    max-width:760px; text-align:center;
+  }
+  .gift-note .ribbon{
+    display:inline-block; font-family:'Baloo 2'; font-weight:800; font-size:1rem;
+    text-transform:uppercase; letter-spacing:.08em; background:var(--berry-dark); color:#fff;
+    padding:8px 22px; border-radius:999px; margin-bottom:24px;
+  }
+  .gift-note h2{font-size:clamp(1.8rem,4.5vw,2.6rem); margin-bottom:18px;}
+  .gift-note p{font-size:1.08rem; margin-bottom:14px; line-height:1.75;}
+  .gift-note .signature{
+    font-family:'Baloo 2'; font-weight:700; font-size:1.3rem; margin-top:28px;
+  }
+  .gift-note .signature small{
+    display:block; font-family:'Nunito'; font-weight:600; font-size:0.95rem; margin-top:4px; opacity:.8;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--berry-dark); color:rgba(255,255,255,0.85);
+    padding:50px 0 30px; text-align:center; font-size:0.92rem;
+  }
+  footer .flogo{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    font-family:'Baloo 2'; font-weight:800; font-size:1.3rem; color:#fff; margin-bottom:14px;
+  }
+  footer .flogo img{width:44px; height:44px; border-radius:50%;}
+  footer .ftagline{font-style:italic; opacity:.8; margin-bottom:18px;}
+  footer .fsocial a{
+    margin:0 8px; color:#fff; text-decoration:none; font-weight:700; font-family:'Baloo 2';
+    border:2px solid rgba(255,255,255,0.3); padding:8px 18px; border-radius:999px; display:inline-block; margin-bottom:8px;
+  }
+  footer .fsocial a:hover{background:#fff; color:var(--berry-dark);}
+  footer .fcredit{margin-top:24px; font-size:0.8rem; opacity:.6;}
+
+  @media (prefers-reduced-motion: reduce){
+    .polaroid{animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap">
+    <a href="#top" class="nav-logo">
+      <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/logo.jpg" alt="Chaffle-lujah logo">
+      Chaffle-lujah
+    </a>
+    <div class="nav-links">
+      <a href="#story">Our Story</a>
+      <a href="#menu">The Menu</a>
+      <a href="#owners">Owners</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#events">Find Us</a>
+    </div>
+    <a href="#book" class="nav-cta">Book Us</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">🧇 Waynesville, NC · Pop-Ups &amp; Markets</span>
+      <h1>Waffles worth <span>praising.</span></h1>
+      <p class="lead">Fresh-made savory chaffles, hot off the iron. Built from cheese and wholesome ingredients like sweet potatoes and plantains, our crispy little creations are equal parts comfort food, curiosity, and goodness.</p>
+      <div class="hero-ctas">
+        <a href="#book" class="btn btn-primary">Request Chaffle-lujah</a>
+        <a href="#events" class="btn btn-outline">See Us Out There</a>
+      </div>
+    </div>
+    <div class="clothesline">
+      <div class="line"></div>
+      <div class="polaroid p1"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/holy-beet.jpg" alt="The Holy Beet chaffle"></div>
+      <div class="polaroid p2"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/owners.png" alt="The owners"></div>
+      <div class="polaroid p3"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/whats-a-chaffle.jpg" alt="What's a chaffle"></div>
+      <div class="polaroid p4"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul4.jpg" alt="Market day"></div>
+      <div class="polaroid p5"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul25.jpg" alt="Market day"></div>
+    </div>
+  </div>
+</header>
+
+<!-- ORIGIN STORY -->
+<section class="origin" id="story">
+  <div class="wrap">
+    <div class="origin-card">
+      <h3 style="white-space:nowrap;">CHAFFLE-LUJAH</h3>
+      <div class="pron">CHAFF-ul-LOO-yuh</div>
+      <p style="margin:0; font-size:0.95rem; opacity:.9;">like "hallelujah," but with chaffles 🧇</p>
+    </div>
+    <div class="origin-text">
+      <span class="eyebrow" style="background:var(--berry-dark); color:var(--mustard); border-color:var(--mustard);">How We Got Our Name</span>
+      <h2>One of the questions we get most often is...</h2>
+      <p>"Okay, but how do you pronounce it?" 😅</p>
+      <p>The name started as a joke, but the more we said it, the more it stuck. Now it's become a reminder that good food should be fun, a little unexpected, and maybe even worthy of a tiny happy dance.</p>
+      <p>So whether you came for The OG, Holy Beet, Plantain Jane, or The Benny&hellip; welcome to Chaffle-lujah.</p>
+      <p class="tagline">We know. We made it weird. ✨</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S A CHAFFLE -->
+<section class="chaffle101">
+  <div class="wrap">
+    <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/whats-a-chaffle.jpg" alt="A stack of golden chaffles on a white plate">
+    <div class="copy">
+      <span class="eyebrow">The Basics</span>
+      <h2>So... what's a chaffle?</h2>
+      <p>A chaffle is a savory, cheese-based waffle — crispy on the outside, soft in the middle, and endlessly customizable. We take that simple idea and build it up with wholesome, real ingredients: cheese, eggs, sweet potatoes, plantains, and whatever's fresh that week.</p>
+      <p>The result? Little golden creations that feel like comfort food and taste like something you've never quite had before.</p>
+      <div class="badge-row">
+        <span class="badge">🌱 Vegetarian options</span>
+        <span class="badge">🌾 Gluten-free options</span>
+        <span class="badge">🥚 Made-to-order</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Fan Favorites</span>
+      <h2>Stars of the menu</h2>
+      <p>Made fresh, off the iron, at every pop-up. Flavors rotate with the seasons — here's a taste of what's been turning heads.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="dish">
+        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/holy-beet.jpg" alt="The Holy Beet chaffle"></div>
+        <div class="dish-body">
+          <h3>The Holy Beet</h3>
+          <p>Whipped feta, pickled beets, sunflower microgreens, and a drizzle of balsamic glaze on a crispy sweet potato chaffle base.</p>
+          <div class="dish-tags">
+            <span class="tag veg">Vegetarian</span>
+            <span class="tag gf">Gluten Free</span>
+          </div>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul4.jpg" alt="Chaffle-lujah owners at the market"></div>
+        <div class="dish-body">
+          <h3>The OG</h3>
+          <p>Where it all started. The classic savory chaffle that started the whole "CHAFF-ul-LOO-yuh" obsession — simple, cheesy, and crispy through and through.</p>
+          <div class="dish-tags">
+            <span class="tag soon">Crowd Favorite</span>
+          </div>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul25.jpg" alt="Chaffle-lujah waffle close up"></div>
+        <div class="dish-body">
+          <h3>Plantain Jane &amp; The Benny</h3>
+          <p>Two more from the lineup that keep regulars coming back. Plantain Jane brings the sweet-meets-savory magic; The Benny was called "a warm hug on a plate" by one fan — and we're not arguing.</p>
+          <div class="dish-tags">
+            <span class="tag soon">Ask Us In Person</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OWNERS -->
+<section class="owners" id="owners">
+  <div class="wrap">
+    <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/owners.png" alt="The owners of Chaffle-lujah">
+    <div class="copy">
+      <span class="eyebrow">The People Behind The Iron</span>
+      <h2>Meet the owners</h2>
+      <p>Two friends, one waffle iron, and a name that started as a joke and became a whole vibe. Chaffle-lujah is a small, hands-on operation built on fresh ingredients, good company, and the belief that food should make people smile before the first bite.</p>
+      <p>You'll usually find them together at the iron — one plating, one greeting, both having way too much fun with it.</p>
+      <blockquote>"We fully support all forms of cardio that end with a chaffle." 🧇🏃</blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Waffles Worth Praising</span>
+      <h2>What people are saying</h2>
+      <p>The early word from the people who've already gotten in line.</p>
+    </div>
+    <div class="review-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>"This new chaffle spot is an absolute game-changer and a must-visit for comfort food lovers. They have completely elevated the humble waffle into a crispy, flavorful masterpiece. The standout feature is the insanely fresh microgreens — vibrant, crisp, and packed with flavor."</p>
+        <div class="who">Jenn Magnolia</div>
+        <div class="review-reply">
+          <span class="who">Chaffle-lujah:</span> "A warm hug on a plate" might be our new favorite description of The Benny. 🥹🧇
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>"Run... don't walk. You do not want them to run out of food before you get there! The taste combinations are amazing, the food is so fresh, creative culinary at its best. The owners are fun and super friendly — can't wait till my next meal with them!"</p>
+        <div class="who">Aletha Roper</div>
+        <div class="review-reply">
+          <span class="who">Chaffle-lujah:</span> We fully support all forms of cardio that end with a chaffle. 🧇🏃
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>"The Waffle Redefined: A Savory Masterpiece! This savory waffle treat completely flips the script on what breakfast at any time of day can be. Crisp on the outside, fluffy within, with a rich cheesy baseline. But it's the toppings that elevate this into gourmet territory — the whipped feta is cloud-level light yet intensely flavorful."</p>
+        <div class="who">Courtney Wilson</div>
+        <div class="review-reply">
+          <span class="who">Chaffle-lujah:</span> Well now we're blushing. 🧇✨
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="events" id="events">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Catch Us In The Wild</span>
+      <h2>Where to find Chaffle-lujah</h2>
+      <p>You can find us pop-up style at the Haywood Historic Farmers Market in Waynesville, NC — every other Saturday morning, weather permitting.</p>
+    </div>
+    <div class="event-grid">
+      <a class="event-card" href="https://www.facebook.com/profile.php?id=61590779214955&sk=events" target="_blank" rel="noopener">
+        <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul4.jpg" alt="Haywood Historic Farmers Market - July 4th">
+        <div class="event-body">
+          <div class="date">Sat, July 4 · 6&ndash;9 AM</div>
+          <h3>Haywood Historic Farmers Market</h3>
+          <p>Waynesville Historic Farmers Market, 250 Pigeon St, Waynesville, NC</p>
+        </div>
+      </a>
+      <a class="event-card" href="https://www.facebook.com/profile.php?id=61590779214955&sk=events" target="_blank" rel="noopener">
+        <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul25.jpg" alt="Haywood Historic Farmers Market - July 25th">
+        <div class="event-body">
+          <div class="date">Sat, July 25 · 6&ndash;9 AM</div>
+          <h3>Haywood Historic Farmers Market</h3>
+          <p>Waynesville Historic Farmers Market, 250 Pigeon St, Waynesville, NC</p>
+        </div>
+      </a>
+      <a class="event-card" href="https://www.facebook.com/profile.php?id=61590779214955&sk=events" target="_blank" rel="noopener">
+        <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-aug1.jpg" alt="Haywood Historic Farmers Market - August 1st">
+        <div class="event-body">
+          <div class="date">Sat, Aug 1 · 6&ndash;9 AM</div>
+          <h3>Haywood Historic Farmers Market</h3>
+          <p>Waynesville Historic Farmers Market, 250 Pigeon St, Waynesville, NC</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK / CONTACT -->
+<section class="booking" id="book">
+  <div class="wrap">
+    <span class="eyebrow" style="background:rgba(255,255,255,0.15); border-color:#fff; color:#fff;">Bring Us To You</span>
+    <h2>Request Chaffle-lujah for your event</h2>
+    <p>Markets, breweries, private events, community gatherings, parties, and more — if there's room for a waffle iron, we're interested. Tell us a little about what you're planning and we'll reach out to confirm availability and next steps.</p>
+    <div class="hero-ctas">
+      <a href="mailto:hellochaffle@gmail.com" class="btn btn-primary">Email Us to Book</a>
+      <a href="https://linktr.ee/chaffle_lujah" target="_blank" rel="noopener" class="btn btn-outline">All Our Links</a>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="label">Email</div>
+        <a href="mailto:hellochaffle@gmail.com">hellochaffle@gmail.com</a>
+      </div>
+      <div class="contact-item">
+        <div class="label">Based In</div>
+        <div class="val">Waynesville, NC</div>
+      </div>
+      <div class="contact-item">
+        <div class="label">We're Into</div>
+        <div class="val">Sweet, Savory &amp; Both</div>
+      </div>
+      <div class="contact-item">
+        <div class="label">Dietary Needs?</div>
+        <div class="val">Just ask — we'll work with you</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GIFT NOTE -->
+<section class="gift-note">
+  <div class="wrap">
+    <span class="ribbon">A Little Something From Lamar</span>
+    <h2>This one's on me.</h2>
+    <p>From one bandmate to another — I know what it took to build something with your hands, your name, and your heart, back when it was just the two of us keeping time together. Watching you and your partner build Chaffle-lujah into something this fun, this tasty, and this <em>you</em> has me grinning ear to ear.</p>
+    <p>I'm out here doing big things in Tucson, and I'm doing a lot of it with AI these days — so consider this website my way of saying thank you for everything you brought to the band, and to me, more than ten years ago. It mattered then, and it still does.</p>
+    <p>Use it however you like — a website, a hub for your social links, whatever helps Chaffle-lujah reach more people. It's yours.</p>
+    <div class="signature">
+      Proud of you, brother. Keep going. 🧇
+      <small>— Lamar Myers</small>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="flogo">
+      <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/logo.jpg" alt="Chaffle-lujah logo">
+      Chaffle-lujah
+    </div>
+    <div class="ftagline">Waffles worth praising. ✨</div>
+    <div class="fsocial">
+      <a href="https://www.facebook.com/profile.php?id=61590779214955" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://linktr.ee/chaffle_lujah" target="_blank" rel="noopener">Linktree</a>
+      <a href="mailto:hellochaffle@gmail.com">Email Us</a>
+    </div>
+    <div class="fcredit">Built with love for Chaffle-lujah · Waynesville, NC</div>
+  </div>
+</footer>
+
+</body>
+</html>
