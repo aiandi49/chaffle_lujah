@@ -399,6 +399,12 @@
     .dish-body h3{ font-size:1.1rem; }
   }
 
+  /* Event card titles and address — shrink on desktop to prevent wrapping */
+  @media (min-width:601px){
+    .event-body h3{ font-size:1rem; }
+    .event-body p{ font-size:0.8rem; }
+  }
+
   /* Events heading — shrink on desktop so it stays one line */
   @media (min-width:601px){
     .events .section-head h2{ font-size:clamp(1.5rem, 3.2vw, 2.2rem); }
