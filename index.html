@@ -394,6 +394,11 @@
     .polaroid{animation:none !important;}
   }
 
+  /* Dish titles — shrink on desktop so they stay one line */
+  @media (min-width:601px){
+    .dish-body h3{ font-size:1.1rem; }
+  }
+
   /* Events heading — shrink on desktop so it stays one line */
   @media (min-width:601px){
     .events .section-head h2{ font-size:clamp(1.5rem, 3.2vw, 2.2rem); }
