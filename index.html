@@ -335,6 +335,9 @@
     margin-top:46px; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
     gap:24px; text-align:left;
   }
+  @media (min-width:601px){
+    .contact-grid{ grid-template-columns:1fr 1fr; }
+  }
   .contact-item{
     background:rgba(255,255,255,0.14); border-radius:14px; padding:18px 20px;
     border:1px solid rgba(255,255,255,0.3);
@@ -342,7 +345,7 @@
   .contact-item .label{font-family:'Baloo 2'; font-weight:700; font-size:0.85rem; text-transform:uppercase; opacity:.8; letter-spacing:.06em;}
   .contact-item a, .contact-item div.val{font-weight:700; font-size:1.05rem; margin-top:4px;}
   .contact-item a{display:block;}
-  .contact-item a[href^="mailto"]{font-size:0.72rem; word-break:break-all;}
+  .contact-item a[href^="mailto"]{font-size:1.05rem; word-break:normal;}
   @media (max-width:480px){
     .contact-item a[href^="mailto"]{font-size:0.82rem;}
   }
