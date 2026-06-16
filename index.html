@@ -303,7 +303,7 @@
     transition: transform .2s ease, box-shadow .2s ease;
   }
   .event-card:hover{transform: translateY(-6px); box-shadow:0 16px 36px rgba(122,60,40,0.22);}
-  .event-card img{width:100%; aspect-ratio:16/9; object-fit:cover;}
+  .event-card img{width:100%; display:block; object-fit:contain;}
   .event-body{padding:20px;}
   .event-body .date{
     font-family:'Baloo 2'; font-weight:700; color:var(--berry); font-size:0.95rem;
@@ -511,7 +511,7 @@
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <span class="eyebrow">🧇 Waynesville, NC · Pop-Ups &amp; Markets</span>
+      <span class="eyebrow">🧇 Serving WNC · Pop-Ups &amp; Markets</span>
       <h1>Waffles worth <span>praising.</span></h1>
       <p class="lead">Fresh-made savory chaffles, hot off the iron. Built from cheese and wholesome ingredients like sweet potatoes and plantains, our crispy little creations are equal parts comfort food, curiosity, and goodness.</p>
       <div class="hero-ctas">
@@ -521,11 +521,11 @@
     </div>
     <div class="clothesline">
       <div class="line"></div>
-      <div class="polaroid p1"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/holy-beet.jpg" alt="The Holy Beet chaffle"></div>
-      <div class="polaroid p2"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/owners.png" alt="The owners"></div>
-      <div class="polaroid p3"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/whats-a-chaffle.jpg" alt="What's a chaffle"></div>
-      <div class="polaroid p4"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul4.jpg" alt="Market day"></div>
-      <div class="polaroid p5"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul25.jpg" alt="Market day"></div>
+      <div class="polaroid p1"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/a.png" alt="Chaffle-lujah photo"></div>
+      <div class="polaroid p2"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/b.png" alt="Chaffle-lujah photo"></div>
+      <div class="polaroid p3"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/c.png" alt="Chaffle-lujah photo"></div>
+      <div class="polaroid p4"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/d.png" alt="Chaffle-lujah photo"></div>
+      <div class="polaroid p5"><span class="clip">📎</span><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/e.png" alt="Chaffle-lujah photo"></div>
     </div>
   </div>
 </header>
@@ -577,7 +577,7 @@
     </div>
     <div class="menu-grid">
       <div class="dish">
-        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/holy-beet.jpg" alt="The Holy Beet chaffle"></div>
+        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/f.png" alt="The Holy Beet chaffle"></div>
         <div class="dish-body">
           <h3>The Holy Beet</h3>
           <p>Whipped feta, pickled beets, sunflower microgreens, and a drizzle of balsamic glaze on a crispy sweet potato chaffle base.</p>
@@ -588,7 +588,7 @@
         </div>
       </div>
       <div class="dish">
-        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul4.jpg" alt="Chaffle-lujah owners at the market"></div>
+        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/g.png" alt="Chaffle-lujah owners at the market"></div>
         <div class="dish-body">
           <h3>The OG</h3>
           <p>Where it all started. The classic savory chaffle that started the whole "CHAFF-ul-LOO-yuh" obsession — simple, cheesy, and crispy through and through.</p>
@@ -598,12 +598,45 @@
         </div>
       </div>
       <div class="dish">
-        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul25.jpg" alt="Chaffle-lujah waffle close up"></div>
+        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/h.png" alt="Chaffle-lujah waffle close up"></div>
         <div class="dish-body">
           <h3>Plantain Jane &amp; The Benny</h3>
           <p>Two more from the lineup that keep regulars coming back. Plantain Jane brings the sweet-meets-savory magic; The Benny was called "a warm hug on a plate" by one fan — and we're not arguing.</p>
           <div class="dish-tags">
             <span class="tag soon">Ask Us In Person</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Chaffle row -->
+    <div class="menu-grid" style="margin-top:32px;">
+      <div class="dish">
+        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/i.png" alt="Chaffle"></div>
+        <div class="dish-body">
+          <h3>The Tiny Testimonial</h3>
+          <p>Our newest kid's menu item — a little chaffle made for little hands. All the flavor, none of the overwhelm.</p>
+          <div class="dish-tags">
+            <span class="tag veg">Kid's Menu</span>
+          </div>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/j.png" alt="Chaffle"></div>
+        <div class="dish-body">
+          <h3>Fresh Off the Iron</h3>
+          <p>Every chaffle starts here — made to order, hot and crispy, with a golden crunch that's hard to resist.</p>
+          <div class="dish-tags">
+            <span class="tag gf">Gluten Free</span>
+          </div>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-img"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/images/k.png" alt="Chaffle"></div>
+        <div class="dish-body">
+          <h3>The Chaffle Itself</h3>
+          <p>Cheese meets waffle iron in the most glorious way. Crispy, savory, and endlessly versatile — this is where it all begins.</p>
+          <div class="dish-tags">
+            <span class="tag veg">Vegetarian</span>
           </div>
         </div>
       </div>
@@ -672,27 +705,27 @@
     </div>
     <div class="event-grid">
       <a class="event-card" href="https://www.facebook.com/profile.php?id=61590779214955&sk=events" target="_blank" rel="noopener">
-        <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul4.jpg" alt="Haywood Historic Farmers Market - July 4th">
+        <div style="background:#5B9E6B; line-height:0;"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul4.jpg" alt="Haywood Historic Farmers Market - July 4th"></div>
         <div class="event-body">
           <div class="date">Sat, July 4 · 9 AM&ndash;12 PM</div>
           <h3>Haywood Historic Farmers Market</h3>
-          <p>Waynesville Historic Farmers Market, 250 Pigeon St, Waynesville, NC</p>
+          <p>Haywood Historic Farmers Market, 250 Pigeon St, Waynesville, NC</p>
         </div>
       </a>
       <a class="event-card" href="https://www.facebook.com/profile.php?id=61590779214955&sk=events" target="_blank" rel="noopener">
-        <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul25.jpg" alt="Haywood Historic Farmers Market - July 25th">
+        <div style="background:#3D8C8C; line-height:0;"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-jul25.jpg" alt="Haywood Historic Farmers Market - July 25th"></div>
         <div class="event-body">
           <div class="date">Sat, July 25 · 9 AM&ndash;12 PM</div>
           <h3>Haywood Historic Farmers Market</h3>
-          <p>Waynesville Historic Farmers Market, 250 Pigeon St, Waynesville, NC</p>
+          <p>Haywood Historic Farmers Market, 250 Pigeon St, Waynesville, NC</p>
         </div>
       </a>
       <a class="event-card" href="https://www.facebook.com/profile.php?id=61590779214955&sk=events" target="_blank" rel="noopener">
-        <img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-aug1.jpg" alt="Haywood Historic Farmers Market - August 1st">
+        <div style="background:#A9335A; line-height:0;"><img src="https://vfkolcqawfplpkbwdipx.supabase.co/storage/v1/object/public/chaffle-lujah-website/market-aug1.jpg" alt="Haywood Historic Farmers Market - August 1st"></div>
         <div class="event-body">
           <div class="date">Sat, Aug 1 · 9 AM&ndash;12 PM</div>
           <h3>Haywood Historic Farmers Market</h3>
-          <p>Waynesville Historic Farmers Market, 250 Pigeon St, Waynesville, NC</p>
+          <p>Haywood Historic Farmers Market, 250 Pigeon St, Waynesville, NC</p>
         </div>
       </a>
     </div>
@@ -715,8 +748,8 @@
         <a href="mailto:hellochaffle@gmail.com">hellochaffle@gmail.com</a>
       </div>
       <div class="contact-item">
-        <div class="label">Based In</div>
-        <div class="val">Waynesville, NC</div>
+        <div class="label">Serving</div>
+        <div class="val">WNC</div>
       </div>
       <div class="contact-item">
         <div class="label">We're Into</div>
