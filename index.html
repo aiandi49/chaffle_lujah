@@ -875,7 +875,7 @@
 </section>
 
 <!-- STAY IN TOUCH (newsletter signup) -->
-<section id="stay-in-touch" style="padding:0 0 60px;">
+<section id="stay-in-touch" style="padding:70px 0;">
   <div class="wrap">
     <div class="newsletter">
       <div style="font-size:1.8rem; margin-bottom:6px;">🧇💌</div>
@@ -887,6 +887,7 @@
         <button type="submit">Keep Me Posted</button>
       </form>
       <div class="newsletter-thanks" id="newsletterThanks">You're in! 🎉 See you at the iron soon.</div>
+      <div class="newsletter-error" style="display:none; color:var(--berry-dark); font-size:0.85rem; margin-top:10px; font-weight:700;"></div>
       <div class="newsletter-note">No spam, just waffles. Unsubscribe whenever.</div>
     </div>
   </div>
@@ -924,16 +925,21 @@
         <button type="submit">Yes, Keep In Touch</button>
       </form>
       <button class="exit-nothanks" id="exitNoThanks">No thanks, I'll find my own way back</button>
+      <div class="exit-error" style="display:none; color:var(--berry-dark); font-size:0.85rem; margin-top:10px; font-weight:700;"></div>
     </div>
     <div class="exit-thanks" id="exitThanks">You're in! 🎉 Thanks for hanging around — see you at the iron soon.</div>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
+  var SUPABASE_URL = 'https://mlgmigguhljsiopctkkj.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZ21pZ2d1aGxqc2lvcGN0a2tqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDM3NzcsImV4cCI6MjA4OTY3OTc3N30.rwX3Ck09LwcUyT7SntrRA8rtFmExRlPLsG3iQPMjBSs';
   var SITE_LOAD_TIME = Date.now();
   var MIN_DELAY_MS = 30000;          // 30 seconds on-site before it's eligible to show
   var COOLDOWN_MS = 60 * 60 * 1000;  // don't re-show for an hour after a dismissal
+  var db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   var overlay = document.getElementById('exitOverlay');
   var formWrap = document.getElementById('exitFormWrap');
   var thanksMsg = document.getElementById('exitThanks');
@@ -981,22 +987,48 @@
     if(e.key === 'Escape') hidePopup();
   });
 
-  function handleSignup(form, onDone){
+  function handleSignup(form, source, onDone){
+    var button = form.querySelector('button[type="submit"]');
+    var errorEl = form.parentElement.querySelector('.newsletter-error, .exit-error');
     form.addEventListener('submit', function(e){
       e.preventDefault();
       var firstName = form.firstName.value.trim();
       var email = form.email.value.trim();
       if(!firstName || !email) return;
 
-      // TODO: connect to your email list provider (e.g. Mailchimp, Formspree, ConvertKit)
-      // by posting {firstName, email} to that service's endpoint here.
+      var originalLabel = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Sending…';
+      if(errorEl) errorEl.style.display = 'none';
 
-      localStorage.setItem('chaffle_subscribed', 'true');
-      onDone();
+      db.from('newsletter_signups')
+        .insert([{ first_name: firstName, email: email, source: source }])
+        .then(function(res){
+          button.disabled = false;
+          button.textContent = originalLabel;
+          // Postgres unique_violation (duplicate email) still counts as a success from the user's POV
+          if(res.error && res.error.code !== '23505'){
+            if(errorEl){
+              errorEl.textContent = "Hmm, that didn't go through — mind trying again?";
+              errorEl.style.display = 'block';
+            }
+            return;
+          }
+          localStorage.setItem('chaffle_subscribed', 'true');
+          onDone();
+        })
+        .catch(function(){
+          button.disabled = false;
+          button.textContent = originalLabel;
+          if(errorEl){
+            errorEl.textContent = "Hmm, that didn't go through — mind trying again?";
+            errorEl.style.display = 'block';
+          }
+        });
     });
   }
 
-  handleSignup(exitForm, function(){
+  handleSignup(exitForm, 'exit_popup', function(){
     formWrap.style.display = 'none';
     thanksMsg.style.display = 'block';
     setTimeout(hidePopup, 2600);
@@ -1004,7 +1036,7 @@
 
   var newsletterForm = document.getElementById('newsletterForm');
   var newsletterThanks = document.getElementById('newsletterThanks');
-  handleSignup(newsletterForm, function(){
+  handleSignup(newsletterForm, 'footer', function(){
     newsletterForm.style.display = 'none';
     newsletterThanks.style.display = 'block';
   });
