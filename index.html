@@ -390,6 +390,102 @@
   footer .fsocial a:hover{background:#fff; color:var(--berry-dark);}
   footer .fcredit{margin-top:24px; font-size:0.8rem; opacity:.6;}
 
+  /* ---------- NEWSLETTER (footer signup) ---------- */
+  .newsletter{
+    background:var(--paper); color:var(--ink);
+    border-radius:22px; padding:34px 30px;
+    max-width:640px; margin:0 auto 40px;
+    box-shadow: var(--shadow);
+    border:3px dashed var(--terracotta);
+    text-align:center;
+  }
+  .newsletter h3{
+    font-size:1.5rem; color:var(--berry-dark); margin-bottom:8px;
+  }
+  .newsletter p{
+    color:#5A4636; font-size:0.98rem; margin:0 auto 20px; max-width:460px;
+  }
+  .newsletter-form{
+    display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+  }
+  .newsletter-form input{
+    font-family:'Nunito', sans-serif; font-size:0.95rem;
+    padding:12px 18px; border-radius:999px; border:2px solid #E3CBAE;
+    background:#fff; color:var(--ink); flex:1 1 160px; min-width:0;
+  }
+  .newsletter-form input:focus{outline:none; border-color:var(--berry);}
+  .newsletter-form button{
+    font-family:'Baloo 2'; font-weight:800; font-size:0.95rem;
+    background:var(--berry); color:#fff; border:none; padding:12px 26px;
+    border-radius:999px; cursor:pointer; transition:background .15s ease, transform .15s ease;
+    white-space:nowrap;
+  }
+  .newsletter-form button:hover{background:var(--berry-dark); transform:translateY(-2px);}
+  .newsletter-note{font-size:0.78rem; opacity:.65; margin-top:12px;}
+  .newsletter-thanks{
+    display:none; font-family:'Baloo 2'; font-weight:700; color:var(--berry-dark); font-size:1.05rem;
+  }
+
+  /* ---------- EXIT-INTENT POPUP ---------- */
+  .exit-overlay{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(58,42,32,0.55);
+    display:none; align-items:center; justify-content:center;
+    padding:20px; backdrop-filter: blur(2px);
+  }
+  .exit-overlay.show{display:flex; animation: fadeIn .25s ease;}
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  .exit-card{
+    position:relative; background:var(--paper); border-radius:26px;
+    max-width:460px; width:100%; padding:38px 34px 30px;
+    text-align:center; box-shadow:0 30px 60px rgba(0,0,0,0.3);
+    border:4px solid var(--berry);
+    transform:scale(.92) translateY(10px); animation: popIn .35s cubic-bezier(.2,1.4,.4,1) forwards;
+  }
+  @keyframes popIn{ to{ transform:scale(1) translateY(0); } }
+  .exit-card .halo-badge{
+    width:56px; height:56px; border-radius:50%;
+    background:var(--mustard); color:var(--berry-dark);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.7rem; margin:0 auto 14px; box-shadow:var(--shadow);
+    transform:rotate(-8deg);
+  }
+  .exit-card h3{
+    font-size:1.6rem; color:var(--berry-dark); margin-bottom:10px;
+  }
+  .exit-card p{
+    color:#5A4636; font-size:0.98rem; margin:0 auto 22px; max-width:360px;
+  }
+  .exit-form{display:flex; flex-direction:column; gap:12px; margin-bottom:6px;}
+  .exit-form input{
+    font-family:'Nunito', sans-serif; font-size:1rem;
+    padding:13px 18px; border-radius:14px; border:2px solid #E3CBAE;
+    background:#fff; color:var(--ink); width:100%;
+  }
+  .exit-form input:focus{outline:none; border-color:var(--berry);}
+  .exit-form button{
+    font-family:'Baloo 2'; font-weight:800; font-size:1.02rem;
+    background:var(--berry); color:#fff; border:none; padding:14px 26px;
+    border-radius:999px; cursor:pointer; transition:background .15s ease, transform .15s ease;
+    box-shadow: var(--shadow); margin-top:4px;
+  }
+  .exit-form button:hover{background:var(--berry-dark); transform:translateY(-2px);}
+  .exit-close{
+    position:absolute; top:14px; right:16px;
+    background:none; border:none; font-size:1.4rem; line-height:1; cursor:pointer;
+    color:var(--berry-dark); opacity:.6; font-family:'Baloo 2'; font-weight:700;
+  }
+  .exit-close:hover{opacity:1;}
+  .exit-nothanks{
+    display:block; margin:14px auto 0; background:none; border:none;
+    font-family:'Nunito'; font-size:0.85rem; color:#5A4636; text-decoration:underline;
+    cursor:pointer; opacity:.75;
+  }
+  .exit-nothanks:hover{opacity:1;}
+  .exit-thanks{
+    display:none; font-family:'Baloo 2'; font-weight:700; font-size:1.15rem; color:var(--berry-dark);
+  }
+
   @media (prefers-reduced-motion: reduce){
     .polaroid{animation:none !important;}
   }
@@ -778,6 +874,24 @@
   </div>
 </section>
 
+<!-- STAY IN TOUCH (newsletter signup) -->
+<section id="stay-in-touch" style="padding:0 0 60px;">
+  <div class="wrap">
+    <div class="newsletter">
+      <div style="font-size:1.8rem; margin-bottom:6px;">🧇💌</div>
+      <h3>Don't be a stranger.</h3>
+      <p>Drop your first name and email and we'll keep you in the loop on pop-ups, new flavors, and market dates. That way you're only ever one click away from Chaffle-lujah — waffle heaven, if you will. (See what we did there? 😉)</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="text" name="firstName" placeholder="First name" required aria-label="First name">
+        <input type="email" name="email" placeholder="Email address" required aria-label="Email address">
+        <button type="submit">Keep Me Posted</button>
+      </form>
+      <div class="newsletter-thanks" id="newsletterThanks">You're in! 🎉 See you at the iron soon.</div>
+      <div class="newsletter-note">No spam, just waffles. Unsubscribe whenever.</div>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="wrap">
@@ -795,6 +909,107 @@
     <div class="fcredit">Built with love for Chaffle-lujah&nbsp;·&nbsp;Waynesville,&nbsp;NC</div>
   </div>
 </footer>
+
+<!-- EXIT-INTENT POPUP -->
+<div class="exit-overlay" id="exitOverlay">
+  <div class="exit-card">
+    <button class="exit-close" id="exitClose" aria-label="Close">✕</button>
+    <div id="exitFormWrap">
+      <div class="halo-badge">🧇</div>
+      <h3>Wait — don't waffle on us!</h3>
+      <p>Before you go, leave your first name and email. We'll keep you posted on pop-ups and new flavors — that's the only way we'll ever bug you, promise.</p>
+      <form class="exit-form" id="exitForm">
+        <input type="text" name="firstName" placeholder="First name" required aria-label="First name">
+        <input type="email" name="email" placeholder="Email address" required aria-label="Email address">
+        <button type="submit">Yes, Keep In Touch</button>
+      </form>
+      <button class="exit-nothanks" id="exitNoThanks">No thanks, I'll find my own way back</button>
+    </div>
+    <div class="exit-thanks" id="exitThanks">You're in! 🎉 Thanks for hanging around — see you at the iron soon.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var SITE_LOAD_TIME = Date.now();
+  var MIN_DELAY_MS = 30000;          // 30 seconds on-site before it's eligible to show
+  var COOLDOWN_MS = 60 * 60 * 1000;  // don't re-show for an hour after a dismissal
+  var overlay = document.getElementById('exitOverlay');
+  var formWrap = document.getElementById('exitFormWrap');
+  var thanksMsg = document.getElementById('exitThanks');
+  var exitForm = document.getElementById('exitForm');
+  var closeBtn = document.getElementById('exitClose');
+  var noThanksBtn = document.getElementById('exitNoThanks');
+  var hasFired = false; // don't show more than once per page visit
+
+  function alreadySubscribed(){
+    return localStorage.getItem('chaffle_subscribed') === 'true';
+  }
+  function inCooldown(){
+    var last = localStorage.getItem('chaffle_exit_last_shown');
+    if(!last) return false;
+    return (Date.now() - parseInt(last,10)) < COOLDOWN_MS;
+  }
+  function readyByTime(){
+    return (Date.now() - SITE_LOAD_TIME) >= MIN_DELAY_MS;
+  }
+
+  function showPopup(){
+    if(hasFired || alreadySubscribed() || inCooldown() || !readyByTime()) return;
+    hasFired = true;
+    overlay.classList.add('show');
+    localStorage.setItem('chaffle_exit_last_shown', Date.now().toString());
+  }
+
+  function hidePopup(){
+    overlay.classList.remove('show');
+  }
+
+  // Exit-intent: cursor leaves out the top of the viewport, like heading for the tab/close button
+  document.addEventListener('mouseout', function(e){
+    if(!e.relatedTarget && e.clientY <= 0){
+      showPopup();
+    }
+  });
+
+  closeBtn.addEventListener('click', hidePopup);
+  noThanksBtn.addEventListener('click', hidePopup);
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) hidePopup();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') hidePopup();
+  });
+
+  function handleSignup(form, onDone){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var firstName = form.firstName.value.trim();
+      var email = form.email.value.trim();
+      if(!firstName || !email) return;
+
+      // TODO: connect to your email list provider (e.g. Mailchimp, Formspree, ConvertKit)
+      // by posting {firstName, email} to that service's endpoint here.
+
+      localStorage.setItem('chaffle_subscribed', 'true');
+      onDone();
+    });
+  }
+
+  handleSignup(exitForm, function(){
+    formWrap.style.display = 'none';
+    thanksMsg.style.display = 'block';
+    setTimeout(hidePopup, 2600);
+  });
+
+  var newsletterForm = document.getElementById('newsletterForm');
+  var newsletterThanks = document.getElementById('newsletterThanks');
+  handleSignup(newsletterForm, function(){
+    newsletterForm.style.display = 'none';
+    newsletterThanks.style.display = 'block';
+  });
+})();
+</script>
 
 </body>
 </html>
