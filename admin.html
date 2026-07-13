@@ -51,6 +51,21 @@
   }
   header button:hover{background:rgba(255,255,255,0.12);}
 
+  .announce-banner{
+    background:linear-gradient(90deg, var(--mustard), #F8D68A);
+    padding:16px 24px; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap; border-bottom:2px solid rgba(0,0,0,0.08);
+  }
+  .announce-text{display:flex; align-items:center; gap:12px; flex:1; min-width:240px;}
+  .announce-emoji{font-size:1.5rem; flex-shrink:0;}
+  .announce-copy strong{display:block; font-family:'Baloo 2'; font-weight:800; color:var(--berry-dark); font-size:0.98rem;}
+  .announce-copy span{font-size:0.85rem; color:#5A4636;}
+  .announce-btn{
+    background:var(--berry-dark); color:#fff; font-family:'Baloo 2'; font-weight:800; font-size:0.85rem;
+    padding:10px 20px; border-radius:999px; text-decoration:none; white-space:nowrap; flex-shrink:0;
+  }
+  .announce-btn:hover{background:#6a1f38;}
+
   .layout{
     display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 60px);
   }
@@ -147,11 +162,19 @@
 <div id="app">
   <header>
     <div class="brand">🧇 Chaffle-lujah Admin</div>
-    <div style="display:flex; align-items:center; gap:14px;">
-      <a href="refer-a-friend.html" target="_blank" style="color:#fff; opacity:.85; font-size:0.82rem; text-decoration:underline;">Lamar's referral offer →</a>
-      <button onclick="handleLogout()">Log Out</button>
-    </div>
+    <button onclick="handleLogout()">Log Out</button>
   </header>
+
+  <div class="announce-banner">
+    <div class="announce-text">
+      <span class="announce-emoji">🎉</span>
+      <div class="announce-copy">
+        <strong>Lamar put together a special offer for you to share.</strong>
+        <span>Take a look — if you like it, just let him know and he'll add a button to the live site.</span>
+      </div>
+    </div>
+    <a class="announce-btn" href="refer-a-friend.html" target="_blank">Take a Look</a>
+  </div>
 
   <div class="layout">
     <!-- EDITOR -->
