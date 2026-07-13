@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Special Offer from Lamar Myers</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F7F4EE;
+  --warm: #EDE8DF;
+  --stone: #C9BFA8;
+  --ink: #1C1A17;
+  --ink-mid: #4A4640;
+  --ink-mute: #8A837A;
+  --gold: #B8963E;
+  --gold-lt: #D4AC58;
+  --gold-bg: rgba(184,150,62,0.09);
+  --gold-bdr: rgba(184,150,62,0.28);
+  --white: #FFFFFF;
+  --border: rgba(100,90,76,0.14);
+  --border-md: rgba(100,90,76,0.26);
+  --r: 12px;
+  --shadow-md: 0 8px 32px rgba(28,26,23,0.11);
+  --shadow-lg: 0 24px 64px rgba(28,26,23,0.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.65;}
+.page{max-width:760px;margin:0 auto;padding:60px 28px 90px;}
+
+.eyebrow{
+  font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold);text-align:center;margin-bottom:18px;
+}
+h1{
+  font-family:'Cormorant Garamond',serif;font-weight:600;text-align:center;
+  font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.08;margin-bottom:16px;
+}
+h1 em{color:var(--gold);font-style:italic;}
+.sub{
+  text-align:center;color:var(--ink-mute);font-size:1.02rem;max-width:520px;margin:0 auto 48px;
+}
+
+.case-strip{
+  display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--border);
+  border-radius:100px;padding:10px 20px;margin:0 auto 56px;max-width:fit-content;box-shadow:0 2px 8px rgba(28,26,23,0.06);
+}
+.case-strip img{width:26px;height:26px;border-radius:50%;object-fit:cover;}
+.case-strip span{font-size:0.86rem;color:var(--ink-mid);}
+.case-strip a{color:var(--gold);font-weight:600;text-decoration:none;}
+.case-strip a:hover{text-decoration:underline;}
+
+.section-label{
+  font-family:'DM Mono',monospace;font-size:0.66rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--stone);margin:0 0 16px;display:flex;align-items:center;gap:14px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border-md);}
+
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:56px;}
+@media (max-width:640px){.pricing-grid{grid-template-columns:1fr;}}
+
+.tier{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r);
+  padding:28px 24px;box-shadow:var(--shadow-md);position:relative;overflow:visible;
+}
+.tier.featured{border:2px solid var(--gold);box-shadow:var(--shadow-lg);}
+.tier-ribbon{
+  position:absolute;top:-12px;left:24px;background:var(--gold);color:var(--white);
+  font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:4px 12px;border-radius:100px;
+}
+.tier-name{
+  font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;margin-bottom:6px;margin-top:6px;
+}
+.tier-desc{font-size:0.86rem;color:var(--ink-mute);margin-bottom:18px;min-height:40px;}
+.tier-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap;}
+.tier-was{
+  font-family:'DM Mono',monospace;font-size:0.95rem;color:var(--ink-mute);text-decoration:line-through;
+}
+.tier-now{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:600;color:var(--gold);}
+.tier-now .unit{font-family:'DM Sans',sans-serif;font-size:0.95rem;color:var(--ink-mute);font-weight:500;}
+.tier-save{
+  display:inline-block;font-family:'DM Mono',monospace;font-size:0.66rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--gold);background:var(--gold-bg);border:1px solid var(--gold-bdr);
+  padding:3px 10px;border-radius:100px;margin-bottom:18px;
+}
+.tier-list{list-style:none;margin-top:14px;}
+.tier-list li{
+  font-size:0.86rem;color:var(--ink-mid);padding:7px 0 7px 22px;position:relative;border-bottom:1px solid var(--border);
+}
+.tier-list li:last-child{border-bottom:none;}
+.tier-list li::before{content:'✓';position:absolute;left:0;color:var(--gold);font-weight:700;}
+
+.addon-note{
+  background:var(--gold-bg);border:1px solid var(--gold-bdr);border-radius:var(--r);
+  padding:20px 22px;font-size:0.88rem;color:var(--ink-mid);margin-bottom:56px;
+}
+.addon-note strong{color:var(--ink);}
+
+.cta-block{
+  text-align:center;background:var(--white);border:1px solid var(--border);border-radius:var(--r);
+  padding:40px 30px;box-shadow:var(--shadow-md);
+}
+.cta-block h2{
+  font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;margin-bottom:10px;
+}
+.cta-block p{color:var(--ink-mute);font-size:0.92rem;margin-bottom:26px;max-width:420px;margin-left:auto;margin-right:auto;}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn{
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.88rem;padding:13px 26px;border-radius:100px;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform 0.15s ease;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn-primary{background:var(--gold);color:var(--white);}
+.btn-secondary{background:var(--white);border:1.5px solid var(--border-md);color:var(--ink);}
+
+.fine-print{
+  text-align:center;font-size:0.76rem;color:var(--stone);margin-top:20px;font-family:'DM Mono',monospace;
+  letter-spacing:.02em;
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="eyebrow">A Referral Offer, From One Small Business To Another</div>
+  <h1>Loved what Lamar built for<br><em>Chaffle-lujah?</em> Let's build yours.</h1>
+  <p class="sub">This site — the menu, the newsletter, the admin panel, all of it — was built by Lamar Myers. If you know the owners or found this through their site, this offer is for you.</p>
+
+  <div class="case-strip">
+    <span>See the proof: </span>
+    <a href="https://chaffle-lujah.vercel.app" target="_blank" rel="noopener">chaffle-lujah.vercel.app →</a>
+  </div>
+
+  <div class="section-label">The Offer</div>
+  <div class="pricing-grid">
+
+    <div class="tier featured">
+      <div class="tier-ribbon">Now Through July 31</div>
+      <div class="tier-name">Full Website Build</div>
+      <div class="tier-desc">A complete site + backend automation, built exactly like this one — from scratch, tailored to your business.</div>
+      <div class="tier-price-row">
+        <span class="tier-now">$500</span>
+      </div>
+      <span class="tier-save">Flat Price · One-Time</span>
+      <ul class="tier-list">
+        <li>Custom-designed website, built for your brand</li>
+        <li>Backend automation (signups, data, whatever your business needs)</li>
+        <li>Admin area so you can manage it yourself</li>
+        <li>One-time cost — you own it after that</li>
+      </ul>
+    </div>
+
+    <div class="tier">
+      <div class="tier-name">+ AI Voice Add-On</div>
+      <div class="tier-desc">Want an AI voice chatbot or voice agent on top of your build? Same $500 build price — plus ongoing support.</div>
+      <div class="tier-price-row">
+        <span class="tier-now">$299<span class="unit">/mo</span></span>
+      </div>
+      <span class="tier-save">Unlimited Edits</span>
+      <ul class="tier-list">
+        <li>AI voice chatbot or voice agent, built into your site</li>
+        <li>Unlimited edits and updates, every month</li>
+        <li>Ongoing maintenance — nothing left for you to touch</li>
+        <li>Cancel anytime</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="addon-note">
+    <strong>How it works:</strong> The $500 build price is the same either way. The $299/month is only if you want the AI voice add-on and ongoing unlimited edits — otherwise, the site is yours to keep, no subscription required.
+  </div>
+
+  <div class="section-label">Get Started</div>
+  <div class="cta-block">
+    <h2>See Lamar's full portfolio</h2>
+    <p>Every project, every credential, every way to reach him — all in one place.</p>
+    <div class="cta-buttons">
+      <a class="btn btn-primary" href="https://lamar-myers-biz-card.vercel.app" target="_blank" rel="noopener">View Digital Business Card</a>
+      <a class="btn btn-secondary" href="mailto:director@metaearthinitiative.org?subject=Referral%20from%20Chaffle-lujah%20-%20Website%20Build">Email Lamar Directly</a>
+    </div>
+  </div>
+
+  <div class="fine-print">$500 offer good through July 31 · One build per business</div>
+</div>
+
+</body>
+</html>
