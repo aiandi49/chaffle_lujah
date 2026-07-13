@@ -79,7 +79,18 @@
 
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
-  .image-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;}
+  .image-row{display:grid;grid-template-columns:64px 1fr auto;gap:8px;margin-bottom:8px;align-items:center;}
+  .image-upload-box{
+    width:64px;height:64px;border-radius:10px;border:1.5px dashed #C9AE87;background:#fff;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative;flex-shrink:0;
+  }
+  .image-upload-box:hover{border-color:var(--berry);}
+  .image-upload-box .thumb{width:100%;height:100%;object-fit:cover;display:none;}
+  .image-upload-box .upload-label{font-size:1.3rem;color:#C9AE87;}
+  .image-upload-box.uploading .upload-label{font-size:0.6rem;color:var(--berry);text-align:center;padding:2px;}
+  .image-meta{display:flex;flex-direction:column;gap:4px;}
+  .upload-status{font-size:0.72rem;color:var(--teal);font-weight:700;}
+  .upload-status.error{color:var(--berry-dark);}
   .event-row-edit{display:grid;grid-template-columns:60px 60px 1fr 1fr;gap:8px;margin-bottom:8px;}
 
   .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:2px dashed #E3CBAE;}
@@ -149,7 +160,7 @@
       </div>
 
       <div class="field">
-        <label>Photos (paste image URLs — upload photos to the newsletter-assets bucket in Supabase Storage first, then paste the link here)</label>
+        <label>Photos (click the square to choose a photo from your computer — it uploads automatically)</label>
         <div id="imageRows"></div>
         <button type="button" class="btn btn-save" style="margin-top:4px;" onclick="addImageRow()">+ Add photo</button>
       </div>
@@ -295,12 +306,60 @@
     const row = document.createElement('div');
     row.className = 'image-row';
     row.innerHTML = `
-      <input type="text" placeholder="Image URL" class="img-url" value="${url.replace(/"/g,'&quot;')}">
-      <input type="text" placeholder="Caption" class="img-caption" value="${caption.replace(/"/g,'&quot;')}">
+      <div class="image-upload-box" onclick="this.querySelector('input[type=file]').click()">
+        <input type="file" accept="image/*" style="display:none" onchange="handleImageUpload(event, this.closest('.image-row'))">
+        <img class="thumb" src="${url}" style="display:${url ? 'block' : 'none'};">
+        <span class="upload-label" style="display:${url ? 'none' : 'block'};">+</span>
+      </div>
+      <div class="image-meta">
+        <input type="text" placeholder="Caption" class="img-caption" value="${caption.replace(/"/g,'&quot;')}">
+        <span class="upload-status"></span>
+      </div>
+      <input type="hidden" class="img-url" value="${url.replace(/"/g,'&quot;')}">
       <button type="button" class="btn btn-unapprove" style="padding:8px 12px;" onclick="this.parentElement.remove(); renderPreview();">✕</button>
     `;
-    row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', renderPreview));
+    row.querySelector('.img-caption').addEventListener('input', renderPreview);
     wrap.appendChild(row);
+  }
+
+  async function handleImageUpload(e, row){
+    const file = e.target.files[0];
+    if(!file) return;
+    const box = row.querySelector('.image-upload-box');
+    const thumb = row.querySelector('.thumb');
+    const label = row.querySelector('.upload-label');
+    const status = row.querySelector('.upload-status');
+    const urlInput = row.querySelector('.img-url');
+
+    box.classList.add('uploading');
+    label.style.display = 'block';
+    label.textContent = '…';
+    status.textContent = 'Uploading…';
+    status.className = 'upload-status';
+
+    const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const path = `${Date.now()}-${safeName}`;
+
+    const { error: uploadError } = await db.storage
+      .from('newsletter-assets')
+      .upload(path, file, { cacheControl: '3600', upsert: false });
+
+    box.classList.remove('uploading');
+
+    if(uploadError){
+      label.textContent = '+';
+      status.textContent = "Upload failed — try again";
+      status.className = 'upload-status error';
+      return;
+    }
+
+    const { data: pub } = db.storage.from('newsletter-assets').getPublicUrl(path);
+    urlInput.value = pub.publicUrl;
+    thumb.src = pub.publicUrl;
+    thumb.style.display = 'block';
+    label.style.display = 'none';
+    status.textContent = 'Uploaded ✓';
+    renderPreview();
   }
 
   function addEventRow(day='', month='', title='', detail=''){
