@@ -79,15 +79,20 @@
 
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
-  .image-row{display:grid;grid-template-columns:64px 1fr auto;gap:8px;margin-bottom:8px;align-items:center;}
-  .image-upload-box{
-    width:64px;height:64px;border-radius:10px;border:1.5px dashed #C9AE87;background:#fff;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative;flex-shrink:0;
+  .photo-dropzone{
+    border:2px dashed #C9AE87; border-radius:14px; padding:22px; text-align:center;
+    cursor:pointer; color:#8A7A68; font-family:'Baloo 2'; font-weight:700; font-size:0.92rem;
+    background:#fff; margin-bottom:12px; transition:border-color .15s ease, color .15s ease;
   }
-  .image-upload-box:hover{border-color:var(--berry);}
-  .image-upload-box .thumb{width:100%;height:100%;object-fit:cover;display:none;}
-  .image-upload-box .upload-label{font-size:1.3rem;color:#C9AE87;}
-  .image-upload-box.uploading .upload-label{font-size:0.6rem;color:var(--berry);text-align:center;padding:2px;}
+  .photo-dropzone:hover, .photo-dropzone.dragover{border-color:var(--berry); color:var(--berry-dark);}
+  .photo-dropzone .sub{display:block; font-family:'Nunito'; font-weight:400; font-size:0.78rem; margin-top:4px; color:#8A7A68;}
+  .image-row{display:grid;grid-template-columns:64px 1fr auto;gap:8px;margin-bottom:8px;align-items:center;}
+  .image-thumb-box{
+    width:64px;height:64px;border-radius:10px;border:1.5px solid #E3CBAE;background:#fff;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;
+  }
+  .image-thumb-box .thumb{width:100%;height:100%;object-fit:cover;display:none;}
+  .image-thumb-box .spinner{font-size:1.1rem;}
   .image-meta{display:flex;flex-direction:column;gap:4px;}
   .upload-status{font-size:0.72rem;color:var(--teal);font-weight:700;}
   .upload-status.error{color:var(--berry-dark);}
@@ -160,9 +165,13 @@
       </div>
 
       <div class="field">
-        <label>Photos (click the square to choose a photo from your computer — it uploads automatically)</label>
+        <label>Photos (choose as many as you want at once — captions are optional)</label>
+        <div class="photo-dropzone" id="photoDropzone" onclick="document.getElementById('photoFileInput').click()">
+          + Add Photos
+          <span class="sub">Click to choose, or drag files here — you can select multiple at once</span>
+        </div>
+        <input type="file" id="photoFileInput" accept="image/*" multiple style="display:none" onchange="handlePhotoFiles(this.files); this.value='';">
         <div id="imageRows"></div>
-        <button type="button" class="btn btn-save" style="margin-top:4px;" onclick="addImageRow()">+ Add photo</button>
       </div>
 
       <div class="field">
@@ -282,7 +291,7 @@
       ? new Date(issue.scheduled_for).toISOString().slice(0,16) : '';
 
     document.getElementById('imageRows').innerHTML = '';
-    (issue.images && issue.images.length ? issue.images : [{url:'',caption:''}]).forEach(img => addImageRow(img.url, img.caption));
+    (issue.images || []).forEach(img => addImageRow(img.url, img.caption));
 
     document.getElementById('eventRows').innerHTML = '';
     (issue.events && issue.events.length ? issue.events : [{day:'',month:'',title:'',detail:''}]).forEach(ev => addEventRow(ev.day, ev.month, ev.title, ev.detail));
@@ -306,13 +315,12 @@
     const row = document.createElement('div');
     row.className = 'image-row';
     row.innerHTML = `
-      <div class="image-upload-box" onclick="this.querySelector('input[type=file]').click()">
-        <input type="file" accept="image/*" style="display:none" onchange="handleImageUpload(event, this.closest('.image-row'))">
+      <div class="image-thumb-box">
+        <span class="spinner" style="display:${url ? 'none' : 'inline'};">⏳</span>
         <img class="thumb" src="${url}" style="display:${url ? 'block' : 'none'};">
-        <span class="upload-label" style="display:${url ? 'none' : 'block'};">+</span>
       </div>
       <div class="image-meta">
-        <input type="text" placeholder="Caption" class="img-caption" value="${caption.replace(/"/g,'&quot;')}">
+        <input type="text" placeholder="Caption (optional)" class="img-caption" value="${caption.replace(/"/g,'&quot;')}">
         <span class="upload-status"></span>
       </div>
       <input type="hidden" class="img-url" value="${url.replace(/"/g,'&quot;')}">
@@ -320,47 +328,62 @@
     `;
     row.querySelector('.img-caption').addEventListener('input', renderPreview);
     wrap.appendChild(row);
+    return row;
   }
 
-  async function handleImageUpload(e, row){
-    const file = e.target.files[0];
-    if(!file) return;
-    const box = row.querySelector('.image-upload-box');
+  function handlePhotoFiles(fileList){
+    const files = Array.from(fileList || []);
+    files.forEach(file => uploadOnePhoto(file));
+  }
+
+  async function uploadOnePhoto(file){
+    // Create the row immediately so multiple photos can upload in parallel,
+    // each showing its own progress.
+    const row = addImageRow('', '');
     const thumb = row.querySelector('.thumb');
-    const label = row.querySelector('.upload-label');
+    const spinner = row.querySelector('.spinner');
     const status = row.querySelector('.upload-status');
     const urlInput = row.querySelector('.img-url');
 
-    box.classList.add('uploading');
-    label.style.display = 'block';
-    label.textContent = '…';
     status.textContent = 'Uploading…';
     status.className = 'upload-status';
 
-    const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
-    const path = `${Date.now()}-${safeName}`;
+    try {
+      const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safeName}`;
 
-    const { error: uploadError } = await db.storage
-      .from('newsletter-assets')
-      .upload(path, file, { cacheControl: '3600', upsert: false });
+      const { error: uploadError } = await sb.storage
+        .from('newsletter-assets')
+        .upload(path, file, { cacheControl: '3600', upsert: false });
 
-    box.classList.remove('uploading');
+      if (uploadError) throw uploadError;
 
-    if(uploadError){
-      label.textContent = '+';
-      status.textContent = "Upload failed — try again";
+      const { data: pub } = sb.storage.from('newsletter-assets').getPublicUrl(path);
+      urlInput.value = pub.publicUrl;
+      thumb.src = pub.publicUrl;
+      thumb.style.display = 'block';
+      spinner.style.display = 'none';
+      status.textContent = 'Uploaded ✓';
+      renderPreview();
+    } catch (err) {
+      spinner.textContent = '⚠️';
+      status.textContent = 'Upload failed — remove and try again';
       status.className = 'upload-status error';
-      return;
+      console.error('Photo upload failed:', err);
     }
-
-    const { data: pub } = db.storage.from('newsletter-assets').getPublicUrl(path);
-    urlInput.value = pub.publicUrl;
-    thumb.src = pub.publicUrl;
-    thumb.style.display = 'block';
-    label.style.display = 'none';
-    status.textContent = 'Uploaded ✓';
-    renderPreview();
   }
+
+  // Drag-and-drop support on the dropzone
+  (function setupDropzone(){
+    const zone = document.getElementById('photoDropzone');
+    ['dragenter','dragover'].forEach(evt =>
+      zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.add('dragover'); }));
+    ['dragleave','drop'].forEach(evt =>
+      zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.remove('dragover'); }));
+    zone.addEventListener('drop', e => {
+      if (e.dataTransfer && e.dataTransfer.files) handlePhotoFiles(e.dataTransfer.files);
+    });
+  })();
 
   function addEventRow(day='', month='', title='', detail=''){
     const wrap = document.getElementById('eventRows');
