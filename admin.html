@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaffle-lujah Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --cream:#FBF1E2; --paper:#FFFBF4; --berry:#A9335A; --berry-dark:#7E2543;
+    --terracotta:#E8804E; --mustard:#F4B941; --teal:#3D8C8C; --ink:#3A2A20;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Nunito',sans-serif;background:#EFE3CC;color:var(--ink);min-height:100vh;}
+  h1,h2,h3{font-family:'Baloo 2',sans-serif;margin:0;}
+  input,textarea{font-family:'Nunito',sans-serif;}
+
+  /* ---------- LOGIN ---------- */
+  #loginScreen{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .login-card{
+    background:var(--paper);border-radius:22px;padding:40px 34px;max-width:380px;width:100%;
+    box-shadow:0 20px 50px rgba(90,50,25,0.2);border:3px dashed var(--terracotta);text-align:center;
+  }
+  .login-card .badge{font-size:2rem;margin-bottom:6px;}
+  .login-card h1{font-size:1.6rem;color:var(--berry-dark);margin-bottom:6px;}
+  .login-card p{font-size:0.9rem;color:#5A4636;margin:0 0 20px;}
+  .login-card input{
+    width:100%;padding:12px 16px;border-radius:12px;border:2px solid #E3CBAE;margin-bottom:12px;font-size:0.95rem;
+  }
+  .login-card input:focus{outline:none;border-color:var(--berry);}
+  .login-card button{
+    width:100%;background:var(--berry);color:#fff;border:none;padding:13px;border-radius:999px;
+    font-family:'Baloo 2';font-weight:800;font-size:1rem;cursor:pointer;
+  }
+  .login-card button:hover{background:var(--berry-dark);}
+  #loginError{color:var(--berry-dark);font-size:0.85rem;margin-top:12px;display:none;font-weight:700;}
+
+  /* ---------- APP SHELL ---------- */
+  #app{display:none;}
+  header{
+    background:var(--berry-dark);color:#fff;padding:16px 24px;display:flex;
+    align-items:center;justify-content:space-between;
+  }
+  header .brand{font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:8px;}
+  header button{
+    background:transparent;border:1.5px solid rgba(255,255,255,0.5);color:#fff;padding:8px 16px;
+    border-radius:999px;font-family:'Nunito';font-weight:700;cursor:pointer;font-size:0.85rem;
+  }
+  header button:hover{background:rgba(255,255,255,0.12);}
+
+  .layout{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 60px);
+  }
+  @media (max-width:900px){ .layout{grid-template-columns:1fr;} }
+
+  .editor{padding:28px;overflow-y:auto;}
+  .editor h2{font-size:1.2rem;color:var(--berry-dark);margin-bottom:4px;}
+  .editor .status-line{font-size:0.85rem;color:#5A4636;margin-bottom:20px;}
+  .status-pill{
+    display:inline-block;font-family:'Baloo 2';font-weight:700;font-size:0.72rem;
+    padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em;
+  }
+  .status-draft{background:#EADBC8;color:#7A5C36;}
+  .status-approved{background:#DCEEE9;color:#276B57;}
+  .status-sent{background:#E4D6E0;color:var(--berry-dark);}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-family:'Baloo 2';font-weight:700;font-size:0.82rem;color:var(--berry-dark);margin-bottom:5px;}
+  .field input, .field textarea{
+    width:100%;padding:10px 13px;border-radius:10px;border:1.5px solid #E3CBAE;background:#fff;
+    font-size:0.92rem;color:var(--ink);
+  }
+  .field input:focus, .field textarea:focus{outline:none;border-color:var(--berry);}
+  .field textarea{min-height:70px;resize:vertical;}
+  .field-hint{font-size:0.76rem;color:#8A7A68;margin-top:4px;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .image-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;}
+  .event-row-edit{display:grid;grid-template-columns:60px 60px 1fr 1fr;gap:8px;margin-bottom:8px;}
+
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:2px dashed #E3CBAE;}
+  .btn{
+    font-family:'Baloo 2';font-weight:800;font-size:0.88rem;padding:11px 20px;border-radius:999px;
+    border:none;cursor:pointer;
+  }
+  .btn-save{background:#E3CBAE;color:var(--ink);}
+  .btn-save:hover{background:#D8BB98;}
+  .btn-approve{background:var(--teal);color:#fff;}
+  .btn-approve:hover{background:#2F6E6E;}
+  .btn-unapprove{background:transparent;color:var(--berry-dark);border:1.5px solid var(--berry-dark);}
+  .schedule-inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px;}
+  .schedule-inline input{padding:9px 12px;border-radius:10px;border:1.5px solid #E3CBAE;}
+  #saveMsg{font-size:0.82rem;color:var(--teal);font-weight:700;margin-top:10px;display:none;}
+
+  /* ---------- PREVIEW PANE ---------- */
+  .preview-pane{background:#E3D6BC;padding:28px;overflow-y:auto;}
+  .preview-pane .pv-label{
+    font-family:'Baloo 2';font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.08em;
+    color:#7A5C36;margin-bottom:14px;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="badge">🧇🔒</div>
+    <h1>Chaffle-lujah Admin</h1>
+    <p>Log in to review and approve this week's newsletter.</p>
+    <input type="email" id="loginEmail" placeholder="Email address" autocomplete="username">
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+    <button onclick="handleLogin()">Log In</button>
+    <div id="loginError"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="brand">🧇 Chaffle-lujah Admin</div>
+    <button onclick="handleLogout()">Log Out</button>
+  </header>
+
+  <div class="layout">
+    <!-- EDITOR -->
+    <div class="editor">
+      <h2>This Week's Newsletter</h2>
+      <div class="status-line">
+        Status: <span id="statusPill" class="status-pill status-draft">Draft</span>
+        <span id="scheduleInfo"></span>
+      </div>
+
+      <div class="field">
+        <label>Email subject line</label>
+        <input type="text" id="f_subject">
+      </div>
+      <div class="field">
+        <label>Headline</label>
+        <input type="text" id="f_headline">
+      </div>
+      <div class="field">
+        <label>"Last Week At The Iron" intro</label>
+        <textarea id="f_recap"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Photos (paste image URLs — upload photos to the newsletter-assets bucket in Supabase Storage first, then paste the link here)</label>
+        <div id="imageRows"></div>
+        <button type="button" class="btn btn-save" style="margin-top:4px;" onclick="addImageRow()">+ Add photo</button>
+      </div>
+
+      <div class="field">
+        <label>Market dates this week</label>
+        <div id="eventRows"></div>
+        <button type="button" class="btn btn-save" style="margin-top:4px;" onclick="addEventRow()">+ Add date</button>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Discount code</label>
+          <input type="text" id="f_code">
+        </div>
+        <div class="field">
+          <label>Discount text</label>
+          <input type="text" id="f_discountLabel" placeholder="25% off Wednesdays & Sundays">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>"Looking Ahead" teaser</label>
+        <textarea id="f_ahead"></textarea>
+      </div>
+
+      <div class="btn-row" style="flex-direction:column;align-items:flex-start;">
+        <div class="btn-row" style="border:none;padding:0;margin:0;">
+          <button class="btn btn-save" onclick="saveDraft()">Save Draft</button>
+          <button class="btn btn-approve" id="approveBtn" onclick="approveIssue()">Approve &amp; Schedule</button>
+          <button class="btn btn-unapprove" id="unapproveBtn" style="display:none;" onclick="unapprove()">Move Back to Draft</button>
+        </div>
+        <div class="schedule-inline">
+          <label style="font-family:'Baloo 2';font-weight:700;font-size:0.82rem;color:var(--berry-dark);">Send at:</label>
+          <input type="datetime-local" id="f_scheduledFor">
+        </div>
+        <div id="saveMsg">Saved ✓</div>
+      </div>
+    </div>
+
+    <!-- LIVE PREVIEW -->
+    <div class="preview-pane">
+      <div class="pv-label">Preview — exactly what subscribers will get</div>
+      <div id="previewMount"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---- tucson-connect project ----
+  const SUPABASE_URL = 'https://mlgmigguhljsiopctkkj.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZ21pZ2d1aGxqc2lvcGN0a2tqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDM3NzcsImV4cCI6MjA4OTY3OTc3N30.rwX3Ck09LwcUyT7SntrRA8rtFmExRlPLsG3iQPMjBSs';
+  // ---------------------------------
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let currentIssue = null;
+
+  // ---------- AUTH ----------
+  async function checkSession(){
+    const { data: { session } } = await sb.auth.getSession();
+    if(session){
+      showApp();
+      loadLatestIssue();
+    }
+  }
+
+  async function handleLogin(){
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errEl = document.getElementById('loginError');
+    errEl.style.display = 'none';
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if(error){
+      errEl.textContent = 'Login failed — check your email and password.';
+      errEl.style.display = 'block';
+      return;
+    }
+    showApp();
+    loadLatestIssue();
+  }
+
+  async function handleLogout(){
+    await sb.auth.signOut();
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+
+  function showApp(){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+
+  // ---------- LOAD / SAVE ----------
+  async function loadLatestIssue(){
+    const { data, error } = await sb
+      .from('newsletter_issues')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if(error || !data){
+      console.error(error);
+      return;
+    }
+    currentIssue = data;
+    populateForm(data);
+    renderPreview();
+  }
+
+  function populateForm(issue){
+    document.getElementById('f_subject').value = issue.subject || '';
+    document.getElementById('f_headline').value = issue.headline || '';
+    document.getElementById('f_recap').value = issue.recap_intro || '';
+    document.getElementById('f_code').value = issue.discount_code || '';
+    document.getElementById('f_discountLabel').value = issue.discount_label || '25% off Wednesdays & Sundays';
+    document.getElementById('f_ahead').value = issue.looking_ahead || '';
+    document.getElementById('f_scheduledFor').value = issue.scheduled_for
+      ? new Date(issue.scheduled_for).toISOString().slice(0,16) : '';
+
+    document.getElementById('imageRows').innerHTML = '';
+    (issue.images && issue.images.length ? issue.images : [{url:'',caption:''}]).forEach(img => addImageRow(img.url, img.caption));
+
+    document.getElementById('eventRows').innerHTML = '';
+    (issue.events && issue.events.length ? issue.events : [{day:'',month:'',title:'',detail:''}]).forEach(ev => addEventRow(ev.day, ev.month, ev.title, ev.detail));
+
+    setStatusPill(issue.status, issue.scheduled_for);
+  }
+
+  function setStatusPill(status, scheduledFor){
+    const pill = document.getElementById('statusPill');
+    pill.className = 'status-pill status-' + status;
+    pill.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+    document.getElementById('approveBtn').style.display = status === 'approved' ? 'none' : 'inline-block';
+    document.getElementById('unapproveBtn').style.display = status === 'approved' ? 'inline-block' : 'none';
+    const info = document.getElementById('scheduleInfo');
+    info.textContent = (status === 'approved' && scheduledFor)
+      ? ' — sending ' + new Date(scheduledFor).toLocaleString() : '';
+  }
+
+  function addImageRow(url='', caption=''){
+    const wrap = document.getElementById('imageRows');
+    const row = document.createElement('div');
+    row.className = 'image-row';
+    row.innerHTML = `
+      <input type="text" placeholder="Image URL" class="img-url" value="${url.replace(/"/g,'&quot;')}">
+      <input type="text" placeholder="Caption" class="img-caption" value="${caption.replace(/"/g,'&quot;')}">
+      <button type="button" class="btn btn-unapprove" style="padding:8px 12px;" onclick="this.parentElement.remove(); renderPreview();">✕</button>
+    `;
+    row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', renderPreview));
+    wrap.appendChild(row);
+  }
+
+  function addEventRow(day='', month='', title='', detail=''){
+    const wrap = document.getElementById('eventRows');
+    const row = document.createElement('div');
+    row.className = 'event-row-edit';
+    row.innerHTML = `
+      <input type="text" placeholder="Day" class="ev-day" value="${day}">
+      <input type="text" placeholder="Mon" class="ev-month" value="${month}">
+      <input type="text" placeholder="Event title" class="ev-title" value="${title.replace(/"/g,'&quot;')}">
+      <input type="text" placeholder="Location / time" class="ev-detail" value="${detail.replace(/"/g,'&quot;')}">
+    `;
+    row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', renderPreview));
+    wrap.appendChild(row);
+  }
+
+  function collectForm(){
+    const images = [...document.querySelectorAll('#imageRows .image-row')].map(r => ({
+      url: r.querySelector('.img-url').value.trim(),
+      caption: r.querySelector('.img-caption').value.trim(),
+    })).filter(i => i.url);
+
+    const events = [...document.querySelectorAll('#eventRows .event-row-edit')].map(r => ({
+      day: r.querySelector('.ev-day').value.trim(),
+      month: r.querySelector('.ev-month').value.trim(),
+      title: r.querySelector('.ev-title').value.trim(),
+      detail: r.querySelector('.ev-detail').value.trim(),
+    })).filter(e => e.title);
+
+    return {
+      subject: document.getElementById('f_subject').value.trim(),
+      headline: document.getElementById('f_headline').value.trim(),
+      recap_intro: document.getElementById('f_recap').value.trim(),
+      images,
+      events,
+      discount_code: document.getElementById('f_code').value.trim(),
+      discount_label: document.getElementById('f_discountLabel').value.trim(),
+      looking_ahead: document.getElementById('f_ahead').value.trim(),
+    };
+  }
+
+  async function saveDraft(){
+    const payload = collectForm();
+    const { data, error } = await sb
+      .from('newsletter_issues')
+      .update(payload)
+      .eq('id', currentIssue.id)
+      .select()
+      .single();
+    if(error){ alert('Save failed: ' + error.message); return; }
+    currentIssue = data;
+    flashSaved();
+  }
+
+  async function approveIssue(){
+    const scheduledVal = document.getElementById('f_scheduledFor').value;
+    if(!scheduledVal){
+      alert('Pick a send date/time first.');
+      return;
+    }
+    const payload = { ...collectForm(), status: 'approved', scheduled_for: new Date(scheduledVal).toISOString() };
+    const { data, error } = await sb
+      .from('newsletter_issues')
+      .update(payload)
+      .eq('id', currentIssue.id)
+      .select()
+      .single();
+    if(error){ alert('Approve failed: ' + error.message); return; }
+    currentIssue = data;
+    setStatusPill(data.status, data.scheduled_for);
+    flashSaved();
+  }
+
+  async function unapprove(){
+    const { data, error } = await sb
+      .from('newsletter_issues')
+      .update({ status: 'draft' })
+      .eq('id', currentIssue.id)
+      .select()
+      .single();
+    if(error){ alert('Failed: ' + error.message); return; }
+    currentIssue = data;
+    setStatusPill(data.status, data.scheduled_for);
+    flashSaved();
+  }
+
+  function flashSaved(){
+    const el = document.getElementById('saveMsg');
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 1800);
+  }
+
+  // ---------- LIVE PREVIEW (mirrors the send-weekly-newsletter email template) ----------
+  function renderPreview(){
+    const f = collectForm();
+    const imgs = f.images.map(i => `
+      <div style="width:47%;display:inline-block;vertical-align:top;margin:0 1.5% 10px 0;">
+        <img src="${i.url}" style="width:100%;border-radius:14px;display:block;" onerror="this.style.background='#eee';this.style.height='120px'">
+      </div>`).join('');
+
+    const events = f.events.map(e => `
+      <div style="background:#FBF1E2;border-radius:14px;padding:12px 14px;margin-top:8px;display:flex;gap:12px;align-items:center;">
+        <div style="background:#E8804E;color:#fff;border-radius:10px;width:44px;height:44px;flex:0 0 auto;text-align:center;font-family:'Baloo 2';padding-top:4px;">
+          <div style="font-weight:800;font-size:15px;line-height:1;">${e.day}</div>
+          <div style="font-size:8px;">${e.month}</div>
+        </div>
+        <div>
+          <div style="font-weight:800;color:#7E2543;font-size:14px;">${e.title}</div>
+          <div style="font-size:12px;color:#5A4636;">${e.detail}</div>
+        </div>
+      </div>`).join('');
+
+    document.getElementById('previewMount').innerHTML = `
+      <div style="max-width:520px;margin:0 auto;font-family:'Nunito',sans-serif;background:#FFFBF4;border-radius:20px;overflow:hidden;box-shadow:0 14px 34px rgba(90,50,25,0.18);">
+        <div style="background:#A9335A;color:#fff;text-align:center;padding:30px 22px;">
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#F4B941;margin-bottom:8px;">🧇 The Weekly Waffle</div>
+          <div style="font-family:'Baloo 2';font-size:26px;font-weight:800;">${f.headline || 'Fresh Off The Iron'}</div>
+        </div>
+        <div style="padding:20px 24px 4px;color:#5A4636;font-size:14px;">
+          Hey <strong style="color:#7E2543;">{{first_name}}</strong> — ${f.recap_intro}
+        </div>
+        <div style="padding:16px 24px;">${imgs}</div>
+        <div style="padding:16px 24px;border-top:2px dashed #E9D8BC;">
+          <div style="font-family:'Baloo 2';font-weight:800;color:#7E2543;margin-bottom:4px;">Catch Us In The Wild</div>
+          ${events}
+        </div>
+        <div style="padding:16px 24px;border-top:2px dashed #E9D8BC;">
+          <div style="border:3px dashed #E8804E;border-radius:14px;padding:16px;text-align:center;">
+            <div style="font-family:'Baloo 2';font-size:22px;font-weight:800;color:#7E2543;">${f.discount_label || ''}</div>
+            <div style="display:inline-block;background:#7E2543;color:#fff;font-family:'Baloo 2';font-weight:800;padding:7px 16px;border-radius:999px;margin-top:8px;">CODE: ${f.discount_code || ''}</div>
+          </div>
+        </div>
+        <div style="padding:16px 24px 26px;border-top:2px dashed #E9D8BC;color:#5A4636;font-size:13px;">
+          <div style="font-family:'Baloo 2';font-weight:800;color:#7E2543;margin-bottom:4px;">Looking Ahead</div>
+          ${f.looking_ahead}
+        </div>
+      </div>`;
+  }
+
+  ['f_subject','f_headline','f_recap','f_code','f_discountLabel','f_ahead'].forEach(id => {
+    document.getElementById(id).addEventListener('input', renderPreview);
+  });
+
+  checkSession();
+</script>
+</body>
+</html>
