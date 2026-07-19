@@ -111,7 +111,7 @@
   .image-meta{display:flex;flex-direction:column;gap:4px;}
   .upload-status{font-size:0.72rem;color:var(--teal);font-weight:700;}
   .upload-status.error{color:var(--berry-dark);}
-  .event-row-edit{display:grid;grid-template-columns:60px 60px 1fr 1fr;gap:8px;margin-bottom:8px;}
+  .event-row-edit{display:grid;grid-template-columns:60px 60px 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;}
 
   .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:2px dashed #E3CBAE;}
   .btn{
@@ -210,6 +210,7 @@
 
       <div class="field">
         <label>Market dates this week</label>
+        <div class="field-hint" style="margin-bottom:8px;">Edit any field to fix a date, or tap ✕ to remove one.</div>
         <div id="eventRows"></div>
         <button type="button" class="btn btn-save" style="margin-top:4px;" onclick="addEventRow()">+ Add date</button>
       </div>
@@ -431,9 +432,11 @@
       <input type="text" placeholder="Mon" class="ev-month" value="${month}">
       <input type="text" placeholder="Event title" class="ev-title" value="${title.replace(/"/g,'&quot;')}">
       <input type="text" placeholder="Location / time" class="ev-detail" value="${detail.replace(/"/g,'&quot;')}">
+      <button type="button" class="btn btn-unapprove" style="padding:8px 12px;" onclick="this.parentElement.remove(); renderPreview();">✕</button>
     `;
     row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', renderPreview));
     wrap.appendChild(row);
+    return row;
   }
 
   function collectForm(){
