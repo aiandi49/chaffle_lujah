@@ -389,6 +389,18 @@
   }
   footer .fsocial a:hover{background:#fff; color:var(--berry-dark);}
   footer .fcredit{margin-top:24px; font-size:0.8rem; opacity:.6;}
+  footer .frefer{
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.1rem; line-height:1.3;
+    color:var(--cream); text-decoration:none; border:2px solid var(--cream); border-radius:999px;
+    padding:10px 22px; display:inline-block; max-width:100%; overflow-wrap:anywhere;
+  }
+  .img-fallback{
+    display:flex; align-items:center; justify-content:center; width:100%; min-height:180px; aspect-ratio:4/3;
+    font-size:3rem; background:var(--cream); border:2px dashed var(--berry); color:var(--berry-dark);
+  }
+  .polaroid .img-fallback{min-height:0; aspect-ratio:1/1; font-size:2rem;}
+  .nav-logo .img-fallback, .flogo .img-fallback{width:44px; min-height:0; height:44px; aspect-ratio:1/1; border-radius:50%; font-size:1.4rem;}
+  footer .frefer:hover, footer .frefer:focus-visible{background:var(--cream); color:var(--berry-dark);}
 
   /* ---------- NEWSLETTER (footer signup) ---------- */
   .newsletter{
@@ -920,7 +932,7 @@
     </div>
     <div class="fcredit">Built with love for Chaffle-lujah&nbsp;·&nbsp;Waynesville,&nbsp;NC</div>
     <div style="margin-top:14px;">
-      <a href="refer-a-friend.html" style="font-family:'Baloo 2',sans-serif; font-weight:700; font-size:0.85rem; color:var(--berry); text-decoration:none; border:2px solid var(--berry); border-radius:999px; padding:7px 16px; display:inline-block;">Own a small business? Get a site like this →</a>
+      <a href="refer-a-friend.html" class="frefer">Own a small business? Get a site like this →</a>
     </div>
     <div style="margin-top:12px;">
       <a href="admin.html" style="font-size:0.72rem; opacity:.45; color:inherit; text-decoration:none;">Admin</a>
@@ -1060,5 +1072,30 @@
 })();
 </script>
 
+<script>
+/* Photo safety net: if a hosted photo fails to load, swap in a friendly waffle tile instead of a broken-image icon. */
+(function(){
+  document.addEventListener('error', function(e){
+    var el = e.target;
+    if(!el || el.tagName !== 'IMG' || el.dataset.fallback) return;
+    el.dataset.fallback = '1';
+    var tile = document.createElement('div');
+    tile.className = 'img-fallback';
+    tile.setAttribute('role','img');
+    tile.setAttribute('aria-label', el.getAttribute('alt') || 'Photo');
+    tile.textContent = '\uD83E\uDDC7';
+    if(el.parentNode){ el.parentNode.replaceChild(tile, el); }
+  }, true);
+  /* Catch photos that already failed before this script ran. */
+  window.addEventListener('load', function(){
+    var imgs = document.images;
+    for(var i = imgs.length - 1; i >= 0; i--){
+      if(imgs[i].complete && imgs[i].naturalWidth === 0 && !imgs[i].dataset.fallback){
+        imgs[i].dispatchEvent(new Event('error'));
+      }
+    }
+  });
+})();
+</script>
 </body>
 </html>
